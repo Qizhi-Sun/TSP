@@ -1,10 +1,8 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from keras.src.preprocessing.image import NumpyArrayIterator
-from .GraphAttentionNet import *
-from utils.compute_length import compute_length
 
+from .GraphAttentionNet import *
+import numpy as np
+from utils import compute_length
 class Actor(nn.Module):
     """
     Actor network
@@ -27,20 +25,29 @@ class Critic(nn.Module):
     """
     def __init__(self, batch_size, n_nodes, n_layers, embedding_dim, hidden_dim, hidden_layer_num):
         super(Critic, self).__init__()
-        self.encoder = GraphAttentionEncoder(batch_size=batch_size,embedding_dim=embedding_dim,n_nodes=n_nodes, n_layers=n_layers)
         self.mlp_layer = nn.Sequential(nn.Linear(hidden_dim, hidden_dim),
                                        nn.LeakyReLU())
+        self.embedding_layer = nn.Linear(3, embedding_dim)
         self.input_layer = nn.Linear(embedding_dim, hidden_dim)
-        self.value_net = nn.ModuleList([self.mlp_layer for _ in range(hidden_layer_num)])
+        self.value_net = nn.Sequential(*(self.mlp_layer for _ in range(hidden_layer_num)))
         self.output_layer = nn.Linear(hidden_dim, 1)
     def forward(self, x):
-        x = self.encoder(x)
+        x = self.embedding_layer(x)
         x = self.input_layer(x)
         x = F.leaky_relu(x)
         x = self.value_net(x)
         x = self.output_layer(x)
         return x
 
+def reward_normalization(reward_batch:torch.Tensor) -> torch.Tensor:
+    """
+    :param reward_batch: rewards
+    :return: normalized rewards
+    """
+    reward_mean = reward_batch.mean()
+    reward_std = reward_batch.std()
+    reward_batch = (reward_batch - reward_mean) / reward_std
+    return reward_batch
 
 def cal_reward(graph_instance:np.ndarray, action_seq:np.ndarray) -> torch.Tensor:
     """
@@ -63,29 +70,44 @@ def cal_advantage(reward_batch:torch.Tensor, value_batch:torch.Tensor) -> torch.
     advantage_batch = delta_batch.detach()
     return advantage_batch
 
+def rewards_log(func):
+    def wrapper(*args, **kwargs):
+        actor_loss, critic_loss, r_mean = func(args[0], kwargs['instance'])
+        print('r_mean:', r_mean)
+        print('actor_loss:', actor_loss)
+        print('critic_loss:', critic_loss)
+        with open(kwargs['filename'], 'a') as f:
+            f.write('actor_loss: {}, critic_loss: {}, r_mean: {}\n'.format(actor_loss, critic_loss, r_mean))
+    return wrapper
+
 
 class Agent(nn.Module):
-    def __init__(self, batch_size, embedding_dim, n_nodes, n_layers, hidden_dim, hidden_layer_num):
+    def __init__(self, batch_size, embedding_dim, n_nodes, n_layers, hidden_dim, hidden_layer_num, lr):
         super(Agent, self).__init__()
         self.actor = Actor(batch_size, embedding_dim, n_nodes, n_layers, hidden_dim)
         self.critic = Critic(batch_size, n_nodes, n_layers, embedding_dim, hidden_dim, hidden_layer_num)
-        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=0.001)
-        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=0.001)
+        self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=lr)
+        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=lr)
 
     def take_action(self, graph_instance):
+        graph_instance = torch.tensor(graph_instance, dtype=torch.float32)
         action_sequence, log_sum = self.actor(graph_instance)
         return action_sequence, log_sum
 
     def evaluate_state(self, graph_instance):
-        value = self.critic(graph_instance)
+        graph_instance = torch.tensor(graph_instance, dtype=torch.float32)
+        graph_instance = graph_instance.mean(dim=1)
+        value = self.critic(graph_instance).squeeze(-1)
         return value
 
+    @rewards_log
     def train_model(self, graph_instance):
         action_seq, log_sum = self.take_action(graph_instance)
         rewards = cal_reward(graph_instance, action_seq.detach().cpu().numpy())
+        rewards = reward_normalization(rewards)
         value = self.evaluate_state(graph_instance)
         advantage = cal_advantage(rewards, value)
-        actor_loss = -log_sum * advantage
+        actor_loss = (-log_sum * advantage).mean(dim=0)
         critic_loss = F.mse_loss(value, rewards)
         # actor update
         self.actor_optimizer.zero_grad()
@@ -95,6 +117,7 @@ class Agent(nn.Module):
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         self.critic_optimizer.step()
+        return actor_loss.item(), critic_loss.item(), rewards.mean().item()
 
 
 

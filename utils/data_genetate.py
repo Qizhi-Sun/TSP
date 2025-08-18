@@ -18,7 +18,7 @@ def generate_data(batch_size:int, n_nodes:int, grid_edge:int) -> np.ndarray:
     for i in range (batch_size):
         t2j[f"batch{i}"] = {f"node{j}": {"x":graph_instance[i][j][0], "y":graph_instance[i][j][1], "z":graph_instance[i][j][2]} for j in range(n_nodes)}
     graph_instance_json = json.dumps(t2j)
-    with open("../datalib/graph_instance_json.json", "w") as f:
+    with open("./datalib/graph_instance_json.json", "w") as f:
         f.write(graph_instance_json)
     return graph_instance
 
