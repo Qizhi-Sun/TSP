@@ -1,5 +1,4 @@
 import torch
-
 from .GraphAttentionNet import *
 import numpy as np
 from utils import compute_length
@@ -73,9 +72,6 @@ def cal_advantage(reward_batch:torch.Tensor, value_batch:torch.Tensor) -> torch.
 def rewards_log(func):
     def wrapper(*args, **kwargs):
         actor_loss, critic_loss, r_mean = func(args[0], kwargs['instance'])
-        print('r_mean:', r_mean)
-        print('actor_loss:', actor_loss)
-        print('critic_loss:', critic_loss)
         with open(kwargs['filename'], 'a') as f:
             f.write('actor_loss: {}, critic_loss: {}, r_mean: {}\n'.format(actor_loss, critic_loss, r_mean))
     return wrapper
@@ -100,7 +96,6 @@ class Agent(nn.Module):
         value = self.critic(graph_instance).squeeze(-1)
         return value
 
-    @rewards_log
     def train_model(self, graph_instance):
         action_seq, log_sum = self.take_action(graph_instance)
         rewards = cal_reward(graph_instance, action_seq.detach().cpu().numpy())
@@ -117,6 +112,7 @@ class Agent(nn.Module):
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         self.critic_optimizer.step()
+        x = rewards.mean()
         return actor_loss.item(), critic_loss.item(), rewards.mean().item()
 
 
