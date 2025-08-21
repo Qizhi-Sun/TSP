@@ -1,11 +1,11 @@
 import json
-
 import torch
 import argparse
 from model import Agent
-from utils import generate_data
+from utils import generate_data, plot_original, plot_results, plot_log
 
-save_num = 3
+save_num = 1
+
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
@@ -14,9 +14,9 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--n_layer', type=int, default=2, help='Number of layers')
     parser.add_argument('--hidden_dim', type=int, default=256, help='Hidden dimension')
     parser.add_argument('--hidden_layer_num', type=int, default=2, help='Number of hidden layers')
-    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
+    parser.add_argument('--epochs', type=int, default=500000, help='Number of epochs')
     parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--grid_edge', type=int, default=4000, help='Grid edge length')
+    parser.add_argument('--grid_edge', type=int, default=4, help='Grid edge length')
     parser.add_argument('--train', type=bool, default=True, help='Train or evaluate' )
     return parser.parse_args()
 
@@ -25,11 +25,14 @@ def train() -> None:
     agent = Agent(batch_size=args.batch_size, embedding_dim=args.embedding_dim,
                        n_nodes=args.n_nodes, n_layers=args.n_layer, hidden_dim=args.hidden_dim,
                        hidden_layer_num=args.hidden_layer_num, lr=args.lr)
+    agent.load_state_dict(torch.load(f'./checkpoints/agent{save_num-1}.pt', map_location=torch.device('cuda')))
+    agent.to('cuda')
     a_loss_list = []
     c_loss_list = []
     r_mean_list = []
-    agent.train()
     log_dict =  {}
+    agent.train()
+
 
     for epoch in range(args.epochs):
         graph_instance = generate_data(args.batch_size, args.n_nodes, args.grid_edge, args.train)
@@ -55,15 +58,22 @@ def train() -> None:
     print("training has been finished")
 
 def evaluate() -> None:
-    pass
-
+    args = get_args()
+    state_dict = torch.load(f'./checkpoints/agent{save_num}.pt', map_location=torch.device('cuda'))
+    agent = Agent(batch_size=args.batch_size, embedding_dim=args.embedding_dim,
+                       n_nodes=args.n_nodes, n_layers=args.n_layer, hidden_dim=args.hidden_dim,
+                       hidden_layer_num=args.hidden_layer_num, lr=args.lr)
+    agent.load_state_dict(state_dict)
+    agent.to('cuda')
+    graph_instance = generate_data(args.batch_size, args.n_nodes, args.grid_edge, False)
+    seq_action, _ = agent.take_action(graph_instance)
+    plot_original(graph_instance)
+    plot_results(graph_instance, seq_action.detach().cpu().numpy())
+    plot_log(f'./log/logs{save_num}.json')
 
 def main() -> None:
-    train()
-    # evaluate()
-
-
-
+    # train()
+    evaluate()
 
 if __name__ == '__main__':
     main()

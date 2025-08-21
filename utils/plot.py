@@ -1,3 +1,5 @@
+import json
+
 import matplotlib.pyplot as plt
 import numpy as np
 from jmespath.ast import projection
@@ -20,8 +22,9 @@ def plot_results(graph_instance: np.ndarray, planning_results: np.ndarray) -> No
         x = graph[:, 0]
         y = graph[:, 1]
         z = graph[:, 2]
-        ax.scatter(x, y, z)
-        fig.savefig(f"./images/origin/{batch}.png")
+        ax.plot(x, y, z, '-*')
+        fig.savefig(f"./images/results/{batch}.png")
+        plt.close(fig)
 
 
 """
@@ -39,5 +42,37 @@ def plot_original(graph_instance: np.ndarray) -> None:
         x = graph[:, 0]
         y = graph[:, 1]
         z = graph[:, 2]
-        ax.scatter(x, y, z)
+        ax.scatter(x, y, z, '*')
         fig.savefig(f"./images/origin/{batch}.png")
+        plt.close(fig)
+
+"""
+plotting based on the log 
+"""
+def plot_log(log_path: str) -> None:
+    """
+    :param log_path: log of the planning process
+    :return: None
+    """
+    a_loss_log = []
+    c_loss_log = []
+    r_mean_log = []
+    with open(log_path, "r") as f:
+        log = json.load(f)
+    for batch in range(len(log)):
+        a_loss_log.append(log[f'record{batch+1}']["actor_loss"])
+        c_loss_log.append(log[f'record{batch+1}']["critic_loss"])
+        r_mean_log.append(log[f'record{batch+1}']["reward_mean"])
+    fig = plt.figure()
+    plt.plot(a_loss_log, label="a_loss")
+    fig.savefig("./images/log/a_loss.png")
+    plt.close(fig)
+    fig = plt.figure()
+    plt.plot(c_loss_log, label="c_loss")
+    fig.savefig("./images/log/c_loss.png")
+    plt.close(fig)
+    fig = plt.figure()
+    plt.plot(r_mean_log, label="r_mean")
+    fig.savefig("./images/log/r_mean.png")
+    plt.close(fig)
+

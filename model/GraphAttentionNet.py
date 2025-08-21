@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 
 class GraphAttentionLayer(nn.Module):
-    def __init__(self,embedding_dim, n_heads):
+    def __init__(self, embedding_dim, n_heads):
         super(GraphAttentionLayer, self).__init__()
         self.embedding_dim = embedding_dim
         self.n_heads = n_heads
