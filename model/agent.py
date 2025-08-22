@@ -1,4 +1,5 @@
 import torch
+import copy
 from .GraphAttentionNet import *
 import numpy as np
 from utils import compute_length
@@ -16,25 +17,22 @@ class Actor(nn.Module):
         action_sequence, log_sum = self.decoder(graph_features)
         return action_sequence, log_sum
 
+class RolloutBaseline:
+    def __init__(self, actor, alpha=0.95):
+        self.alpha = alpha
+        self.baseline_actor = copy.deepcopy(actor).to('cuda')
+        for p in self.baseline_actor.parameters():
+            p.requires_grad = False
 
-class Critic(nn.Module):
-    """
-    Critic network
-    return state-value
-    """
-    def __init__(self, batch_size, n_nodes, n_layers, embedding_dim, hidden_dim, hidden_layer_num):
-        super(Critic, self).__init__()
-        self.mlp_layer = nn.Sequential(nn.Linear(hidden_dim, hidden_dim),
-                                       nn.LeakyReLU())
-        self.encoder = GraphAttentionEncoder(batch_size=batch_size, embedding_dim=embedding_dim, n_nodes=n_nodes, n_layers=n_layers)
-        self.value_net = nn.Sequential(*(self.mlp_layer for _ in range(hidden_layer_num)))
-        self.output_layer = nn.Linear(hidden_dim, 1)
-    def forward(self, x):
-        x = self.encoder(x)
-        x = torch.mean(x,dim=1).squeeze()
-        x = self.value_net(x)
-        x = self.output_layer(x).squeeze()
-        return x
+    def update(self, actor):
+        # EMA 更新 baseline 参数
+        for p, bp in zip(actor.parameters(), self.baseline_actor.parameters()):
+            bp.data.copy_(self.alpha * bp.data + (1 - self.alpha) * p.data)
+
+    def evaluate(self, instance):
+        with torch.no_grad():
+            action_seq, _ = self.baseline_actor(instance)
+        return action_seq
 
 def advantage_normalization(advantage:torch.Tensor) -> torch.Tensor:
     """
@@ -43,7 +41,7 @@ def advantage_normalization(advantage:torch.Tensor) -> torch.Tensor:
     """
     advantage_mean = advantage.mean()
     advantage_std = advantage.std()
-    advantage_norm = (advantage - advantage_mean) / (advantage_std + 1e-5)
+    advantage_norm = (advantage - advantage_mean) / (advantage_std + 1e-8)
     return advantage_norm
 
 def cal_reward(graph_instance:np.ndarray, action_seq:np.ndarray) -> torch.Tensor:
@@ -72,39 +70,34 @@ class Agent(nn.Module):
     def __init__(self, batch_size, embedding_dim, n_nodes, n_layers, hidden_dim, hidden_layer_num, lr):
         super(Agent, self).__init__()
         self.actor = Actor(batch_size, embedding_dim, n_nodes, n_layers, hidden_dim)
-        self.critic = Critic(batch_size, n_nodes, n_layers, embedding_dim, hidden_dim, hidden_layer_num)
+        self.rollout = RolloutBaseline(self.actor)
         self.actor_optimizer = torch.optim.Adam(self.actor.parameters(), lr=lr)
-        self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=lr)
 
     def take_action(self, graph_instance):
         graph_instance = torch.tensor(graph_instance, dtype=torch.float32, device='cuda')
         action_sequence, log_sum = self.actor(graph_instance)
         return action_sequence, log_sum
-
-    def evaluate_state(self, graph_instance):
+    def evaluate(self,graph_instance):
         graph_instance = torch.tensor(graph_instance, dtype=torch.float32, device='cuda')
-        value = self.critic(graph_instance)
-        return value
+        action_sequence = self.rollout.evaluate(graph_instance)
+        return action_sequence
 
     def train_model(self, graph_instance):
         action_seq, log_sum = self.take_action(graph_instance)
+        action_seq_baseline = self.evaluate(graph_instance)
         rewards = cal_reward(graph_instance, action_seq.detach().cpu().numpy())
-        value = self.evaluate_state(graph_instance)
-        advantage = cal_advantage(rewards, value)
+        baseline = cal_reward(graph_instance, action_seq_baseline.detach().cpu().numpy())
+        advantage = cal_advantage(rewards, baseline)
         advantage = advantage_normalization(advantage)
-        actor_loss = (-log_sum * advantage).mean(dim=0)
-        critic_loss = F.mse_loss(value, rewards)
+        actor_loss = (log_sum * advantage).mean()
         # actor update
         self.actor_optimizer.zero_grad()
         actor_loss.backward()
         torch.nn.utils.clip_grad_norm_(self.actor.parameters(), max_norm=2.0)
         self.actor_optimizer.step()
-        # critic update
-        self.critic_optimizer.zero_grad()
-        critic_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), max_norm=2.0)
-        self.critic_optimizer.step()
-        return actor_loss.item(), critic_loss.item(), rewards.mean().item()
+        # baseline model update
+        self.rollout.update(self.actor)
+        return actor_loss.item(), 0, rewards.mean().item()
 
 
 

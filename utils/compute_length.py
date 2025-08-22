@@ -12,5 +12,5 @@ def compute_length(graph_instance:np.ndarray, action_seq:np.ndarray) -> np.ndarr
             dis_mat[:, j, i] = dis_mat[:, i, j]
     for i in range(action_seq.shape[1] - 1):
         total_dis += dis_mat[np.arange(action_seq.shape[0]), action_seq[:, i], action_seq[:, i+1]]
-    rewards = -total_dis
+    rewards = total_dis
     return rewards

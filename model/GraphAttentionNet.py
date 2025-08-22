@@ -11,15 +11,17 @@ class GraphAttentionLayer(nn.Module):
         self.n_heads = n_heads
         self.mha = nn.MultiheadAttention(embedding_dim, n_heads, batch_first=True)
         self.b_n = nn.BatchNorm1d(embedding_dim)
-        self.feedforward= nn.Linear(embedding_dim, embedding_dim)
+        self.feedforward_1= nn.Linear(embedding_dim, embedding_dim * 2)
+        self.feedforward_2 = nn.Linear(embedding_dim * 2, embedding_dim)
     def forward(self, x):
         tmp = x
         x = self.mha(x,x,x)[0]
         x += tmp
         x = self.b_n(x.permute(0,2,1)).permute(0,2,1)
         tmp = x
-        x = self.feedforward(x)
+        x = self.feedforward_1(x)
         x = F.leaky_relu(x)
+        x = self.feedforward_2(x)
         x+= tmp
         x = self.b_n(x.permute(0,2,1)).permute(0,2,1)
         return x
