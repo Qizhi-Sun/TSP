@@ -37,7 +37,7 @@ class GraphAttentionEncoder(nn.Module):
         self.batch_size = batch_size
         self.n_nodes = n_nodes
         self.embedding_dim = embedding_dim
-        self.input_embedding = nn.Linear(3, embedding_dim)
+        self.input_embedding = nn.Linear(2, embedding_dim)
         self.attention_layers = nn.ModuleList()
         for i in range(n_layers):
             self.attention_layers.append(GraphAttentionLayer(embedding_dim, 8))

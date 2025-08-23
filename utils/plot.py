@@ -18,11 +18,9 @@ def plot_results(graph_instance: np.ndarray, planning_results: np.ndarray) -> No
         action = planning_results[batch]
         graph = graph[action, :]
         fig = plt.figure(batch)
-        ax = fig.add_subplot(111, projection='3d')
         x = graph[:, 0]
         y = graph[:, 1]
-        z = graph[:, 2]
-        ax.plot(x, y, z, '-*')
+        plt.plot(x, y,'*-')
         fig.savefig(f"./images/results/{batch}.png")
         plt.close(fig)
 
@@ -38,11 +36,9 @@ def plot_original(graph_instance: np.ndarray) -> None:
     for batch in range(graph_instance.shape[0]):
         graph = graph_instance[batch]
         fig = plt.figure(batch)
-        ax = fig.add_subplot(111, projection='3d')
         x = graph[:, 0]
         y = graph[:, 1]
-        z = graph[:, 2]
-        ax.scatter(x, y, z, '*')
+        plt.scatter(x, y, marker='*')
         fig.savefig(f"./images/origin/{batch}.png")
         plt.close(fig)
 
