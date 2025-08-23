@@ -1,0 +1,502 @@
+{
+    "record1": {
+        "actor_loss": -2.409174680709839,
+        "critic_loss": 220094.99375,
+        "reward_mean": 232.20325317382813
+    },
+    "record2": {
+        "actor_loss": -2.4495450973510744,
+        "critic_loss": 214463.665625,
+        "reward_mean": 234.95649108886718
+    },
+    "record3": {
+        "actor_loss": -2.717063283920288,
+        "critic_loss": 214370.178125,
+        "reward_mean": 244.2478240966797
+    },
+    "record4": {
+        "actor_loss": -2.665836143493652,
+        "critic_loss": 202925.734375,
+        "reward_mean": 240.4930389404297
+    },
+    "record5": {
+        "actor_loss": -2.392663288116455,
+        "critic_loss": 191421.134375,
+        "reward_mean": 235.74476013183593
+    },
+    "record6": {
+        "actor_loss": -2.4255223274230957,
+        "critic_loss": 181658.36875,
+        "reward_mean": 233.46841735839843
+    },
+    "record7": {
+        "actor_loss": -2.380968618392944,
+        "critic_loss": 171784.096875,
+        "reward_mean": 232.12354125976563
+    },
+    "record8": {
+        "actor_loss": -2.6040870189666747,
+        "critic_loss": 160072.903125,
+        "reward_mean": 229.73482360839844
+    },
+    "record9": {
+        "actor_loss": -2.350251483917236,
+        "critic_loss": 156851.353125,
+        "reward_mean": 239.76710815429686
+    },
+    "record10": {
+        "actor_loss": -2.422455930709839,
+        "critic_loss": 142600.178125,
+        "reward_mean": 240.07923583984376
+    },
+    "record11": {
+        "actor_loss": -2.6730095863342287,
+        "critic_loss": 122720.9953125,
+        "reward_mean": 237.31477966308594
+    },
+    "record12": {
+        "actor_loss": -2.539347267150879,
+        "critic_loss": 101831.225,
+        "reward_mean": 236.5156036376953
+    },
+    "record13": {
+        "actor_loss": -2.9117101192474366,
+        "critic_loss": 78923.1203125,
+        "reward_mean": 237.6515350341797
+    },
+    "record14": {
+        "actor_loss": -2.8165086269378663,
+        "critic_loss": 53421.984375,
+        "reward_mean": 238.75907287597656
+    },
+    "record15": {
+        "actor_loss": -2.7416078090667724,
+        "critic_loss": 25963.8501953125,
+        "reward_mean": 237.46607971191406
+    },
+    "record16": {
+        "actor_loss": -2.4165345191955567,
+        "critic_loss": 5706.01962890625,
+        "reward_mean": 235.1851806640625
+    },
+    "record17": {
+        "actor_loss": -2.157483124732971,
+        "critic_loss": 2503.5796142578124,
+        "reward_mean": 238.32239990234376
+    },
+    "record18": {
+        "actor_loss": -1.9504182815551758,
+        "critic_loss": 3141.868701171875,
+        "reward_mean": 238.07181091308593
+    },
+    "record19": {
+        "actor_loss": -2.462138032913208,
+        "critic_loss": 1796.2060546875,
+        "reward_mean": 233.6785400390625
+    },
+    "record20": {
+        "actor_loss": -2.3396249771118165,
+        "critic_loss": 2213.664794921875,
+        "reward_mean": 234.05255737304688
+    },
+    "record21": {
+        "actor_loss": -2.2143758296966554,
+        "critic_loss": 1805.6952392578125,
+        "reward_mean": 237.81988525390625
+    },
+    "record22": {
+        "actor_loss": -2.0139039039611815,
+        "critic_loss": 2253.734375,
+        "reward_mean": 235.91000061035157
+    },
+    "record23": {
+        "actor_loss": -2.1882070541381835,
+        "critic_loss": 1677.621875,
+        "reward_mean": 238.909033203125
+    },
+    "record24": {
+        "actor_loss": -2.439242887496948,
+        "critic_loss": 1365.025830078125,
+        "reward_mean": 237.98949279785157
+    },
+    "record25": {
+        "actor_loss": -2.3063659191131594,
+        "critic_loss": 1777.230078125,
+        "reward_mean": 234.76663208007812
+    },
+    "record26": {
+        "actor_loss": -2.3896898508071898,
+        "critic_loss": 1724.954541015625,
+        "reward_mean": 233.17576904296874
+    },
+    "record27": {
+        "actor_loss": -2.7083519458770753,
+        "critic_loss": 2048.5955810546875,
+        "reward_mean": 237.44794006347655
+    },
+    "record28": {
+        "actor_loss": -2.485279893875122,
+        "critic_loss": 1628.978173828125,
+        "reward_mean": 236.58374938964843
+    },
+    "record29": {
+        "actor_loss": -2.3028250694274903,
+        "critic_loss": 1680.40205078125,
+        "reward_mean": 235.693359375
+    },
+    "record30": {
+        "actor_loss": -2.161610984802246,
+        "critic_loss": 1524.32568359375,
+        "reward_mean": 234.32535400390626
+    },
+    "record31": {
+        "actor_loss": -2.2811527252197266,
+        "critic_loss": 1469.783154296875,
+        "reward_mean": 237.7651397705078
+    },
+    "record32": {
+        "actor_loss": -2.1802133083343507,
+        "critic_loss": 1604.0828857421875,
+        "reward_mean": 238.20831298828125
+    },
+    "record33": {
+        "actor_loss": -2.418488359451294,
+        "critic_loss": 1538.6093505859376,
+        "reward_mean": 232.59067993164064
+    },
+    "record34": {
+        "actor_loss": -2.427228879928589,
+        "critic_loss": 1491.8427001953125,
+        "reward_mean": 233.00035095214844
+    },
+    "record35": {
+        "actor_loss": -2.3261247634887696,
+        "critic_loss": 1632.9397216796874,
+        "reward_mean": 231.47051391601562
+    },
+    "record36": {
+        "actor_loss": -2.41958065032959,
+        "critic_loss": 1561.9836669921874,
+        "reward_mean": 230.0892578125
+    },
+    "record37": {
+        "actor_loss": -2.562589931488037,
+        "critic_loss": 1418.27919921875,
+        "reward_mean": 236.6259765625
+    },
+    "record38": {
+        "actor_loss": -2.596088695526123,
+        "critic_loss": 1551.6896728515626,
+        "reward_mean": 237.44871826171874
+    },
+    "record39": {
+        "actor_loss": -2.418109083175659,
+        "critic_loss": 1634.485400390625,
+        "reward_mean": 233.25473327636718
+    },
+    "record40": {
+        "actor_loss": -2.403169536590576,
+        "critic_loss": 1676.42900390625,
+        "reward_mean": 233.3441375732422
+    },
+    "record41": {
+        "actor_loss": -1.9618337154388428,
+        "critic_loss": 1244.5548706054688,
+        "reward_mean": 238.21221923828125
+    },
+    "record42": {
+        "actor_loss": -2.225699710845947,
+        "critic_loss": 1284.764453125,
+        "reward_mean": 236.81150817871094
+    },
+    "record43": {
+        "actor_loss": -2.537716245651245,
+        "critic_loss": 1848.7087646484374,
+        "reward_mean": 237.98880920410156
+    },
+    "record44": {
+        "actor_loss": -2.57982497215271,
+        "critic_loss": 1754.156689453125,
+        "reward_mean": 237.81312561035156
+    },
+    "record45": {
+        "actor_loss": -2.4413106441497803,
+        "critic_loss": 1585.7826904296876,
+        "reward_mean": 238.38778381347657
+    },
+    "record46": {
+        "actor_loss": -2.696948432922363,
+        "critic_loss": 1744.88525390625,
+        "reward_mean": 239.6380859375
+    },
+    "record47": {
+        "actor_loss": -2.5264114856719972,
+        "critic_loss": 1681.1913818359376,
+        "reward_mean": 234.14805908203124
+    },
+    "record48": {
+        "actor_loss": -2.7038017749786376,
+        "critic_loss": 1558.6533203125,
+        "reward_mean": 234.16207275390624
+    },
+    "record49": {
+        "actor_loss": -2.65969295501709,
+        "critic_loss": 1418.4494140625,
+        "reward_mean": 234.1599609375
+    },
+    "record50": {
+        "actor_loss": -2.724870204925537,
+        "critic_loss": 1498.703662109375,
+        "reward_mean": 236.80633850097655
+    },
+    "record51": {
+        "actor_loss": -2.3129236698150635,
+        "critic_loss": 1565.063427734375,
+        "reward_mean": 243.5528564453125
+    },
+    "record52": {
+        "actor_loss": -2.3069323539733886,
+        "critic_loss": 1772.6421630859375,
+        "reward_mean": 243.7959747314453
+    },
+    "record53": {
+        "actor_loss": -2.2783077716827393,
+        "critic_loss": 1472.872802734375,
+        "reward_mean": 240.32781982421875
+    },
+    "record54": {
+        "actor_loss": -2.353061151504517,
+        "critic_loss": 1287.9963134765626,
+        "reward_mean": 239.20534973144532
+    },
+    "record55": {
+        "actor_loss": -2.473985958099365,
+        "critic_loss": 1535.2755126953125,
+        "reward_mean": 236.3794952392578
+    },
+    "record56": {
+        "actor_loss": -2.669330024719238,
+        "critic_loss": 1567.258837890625,
+        "reward_mean": 237.96791381835936
+    },
+    "record57": {
+        "actor_loss": -2.2973658561706545,
+        "critic_loss": 1578.125830078125,
+        "reward_mean": 245.69393920898438
+    },
+    "record58": {
+        "actor_loss": -2.239620804786682,
+        "critic_loss": 1472.5804931640625,
+        "reward_mean": 246.37887268066407
+    },
+    "record59": {
+        "actor_loss": -2.279064393043518,
+        "critic_loss": 1821.891796875,
+        "reward_mean": 239.94546813964843
+    },
+    "record60": {
+        "actor_loss": -2.166753387451172,
+        "critic_loss": 1589.7842529296875,
+        "reward_mean": 238.63037719726563
+    },
+    "record61": {
+        "actor_loss": -2.4052228927612305,
+        "critic_loss": 1303.594384765625,
+        "reward_mean": 237.0897247314453
+    },
+    "record62": {
+        "actor_loss": -2.2678646087646483,
+        "critic_loss": 1184.405224609375,
+        "reward_mean": 235.46273193359374
+    },
+    "record63": {
+        "actor_loss": -2.534019947052002,
+        "critic_loss": 1466.414208984375,
+        "reward_mean": 233.2658477783203
+    },
+    "record64": {
+        "actor_loss": -2.7230601787567137,
+        "critic_loss": 1556.776708984375,
+        "reward_mean": 231.08413696289062
+    },
+    "record65": {
+        "actor_loss": -3.0137020111083985,
+        "critic_loss": 1723.989208984375,
+        "reward_mean": 234.4071044921875
+    },
+    "record66": {
+        "actor_loss": -2.8338372230529787,
+        "critic_loss": 1694.766845703125,
+        "reward_mean": 235.2293487548828
+    },
+    "record67": {
+        "actor_loss": -2.1558709144592285,
+        "critic_loss": 1229.226220703125,
+        "reward_mean": 239.63297424316406
+    },
+    "record68": {
+        "actor_loss": -2.445530414581299,
+        "critic_loss": 1270.0615478515624,
+        "reward_mean": 238.9027587890625
+    },
+    "record69": {
+        "actor_loss": -2.1716833114624023,
+        "critic_loss": 1636.02939453125,
+        "reward_mean": 238.06324768066406
+    },
+    "record70": {
+        "actor_loss": -2.07625789642334,
+        "critic_loss": 1544.069482421875,
+        "reward_mean": 238.06460266113282
+    },
+    "record71": {
+        "actor_loss": -2.275040864944458,
+        "critic_loss": 1441.897021484375,
+        "reward_mean": 243.83604125976564
+    },
+    "record72": {
+        "actor_loss": -2.4114388465881347,
+        "critic_loss": 1563.2054931640625,
+        "reward_mean": 240.8355255126953
+    },
+    "record73": {
+        "actor_loss": -2.5780460834503174,
+        "critic_loss": 1493.6583740234375,
+        "reward_mean": 235.17274169921876
+    },
+    "record74": {
+        "actor_loss": -2.6307767391204835,
+        "critic_loss": 1600.8802490234375,
+        "reward_mean": 237.45953674316405
+    },
+    "record75": {
+        "actor_loss": -2.245772385597229,
+        "critic_loss": 1521.8603759765624,
+        "reward_mean": 237.02802734375
+    },
+    "record76": {
+        "actor_loss": -2.423871374130249,
+        "critic_loss": 1600.4326171875,
+        "reward_mean": 239.1142608642578
+    },
+    "record77": {
+        "actor_loss": -2.5361091613769533,
+        "critic_loss": 1302.88486328125,
+        "reward_mean": 231.97057495117187
+    },
+    "record78": {
+        "actor_loss": -2.432298517227173,
+        "critic_loss": 1232.3716674804687,
+        "reward_mean": 230.15852966308594
+    },
+    "record79": {
+        "actor_loss": -2.59451961517334,
+        "critic_loss": 1565.0722900390624,
+        "reward_mean": 233.86273803710938
+    },
+    "record80": {
+        "actor_loss": -2.370247554779053,
+        "critic_loss": 1452.5712646484376,
+        "reward_mean": 232.37699279785156
+    },
+    "record81": {
+        "actor_loss": -1.8958556413650514,
+        "critic_loss": 1497.8698486328126,
+        "reward_mean": 238.0847930908203
+    },
+    "record82": {
+        "actor_loss": -2.0942150592803954,
+        "critic_loss": 1579.9266357421875,
+        "reward_mean": 241.0931854248047
+    },
+    "record83": {
+        "actor_loss": -2.260227108001709,
+        "critic_loss": 1827.3050048828125,
+        "reward_mean": 231.15289916992188
+    },
+    "record84": {
+        "actor_loss": -2.4648308753967285,
+        "critic_loss": 1866.910302734375,
+        "reward_mean": 235.96707458496093
+    },
+    "record85": {
+        "actor_loss": -2.3840087413787843,
+        "critic_loss": 1752.78056640625,
+        "reward_mean": 236.1434814453125
+    },
+    "record86": {
+        "actor_loss": -2.5012022256851196,
+        "critic_loss": 1845.75615234375,
+        "reward_mean": 237.47254943847656
+    },
+    "record87": {
+        "actor_loss": -2.6209441661834716,
+        "critic_loss": 1512.623291015625,
+        "reward_mean": 246.53509216308595
+    },
+    "record88": {
+        "actor_loss": -2.4556553840637205,
+        "critic_loss": 1569.7444580078125,
+        "reward_mean": 248.4160949707031
+    },
+    "record89": {
+        "actor_loss": -2.7320043087005614,
+        "critic_loss": 1501.0051025390626,
+        "reward_mean": 238.0877716064453
+    },
+    "record90": {
+        "actor_loss": -2.7102890968322755,
+        "critic_loss": 1649.52275390625,
+        "reward_mean": 238.35312194824218
+    },
+    "record91": {
+        "actor_loss": -2.853409194946289,
+        "critic_loss": 1653.6099853515625,
+        "reward_mean": 237.3966094970703
+    },
+    "record92": {
+        "actor_loss": -2.7470452308654787,
+        "critic_loss": 1718.3601806640625,
+        "reward_mean": 235.6578582763672
+    },
+    "record93": {
+        "actor_loss": -2.8545113086700438,
+        "critic_loss": 1871.4958251953126,
+        "reward_mean": 230.8283233642578
+    },
+    "record94": {
+        "actor_loss": -2.7469921588897703,
+        "critic_loss": 1822.2818603515625,
+        "reward_mean": 228.76478576660156
+    },
+    "record95": {
+        "actor_loss": -2.2055402278900145,
+        "critic_loss": 1478.951171875,
+        "reward_mean": 240.25689392089845
+    },
+    "record96": {
+        "actor_loss": -2.3853848457336424,
+        "critic_loss": 1359.0246826171874,
+        "reward_mean": 240.46333923339844
+    },
+    "record97": {
+        "actor_loss": -2.581655406951904,
+        "critic_loss": 1599.5263916015624,
+        "reward_mean": 235.49937133789064
+    },
+    "record98": {
+        "actor_loss": -2.4675754070281983,
+        "critic_loss": 1421.4555297851562,
+        "reward_mean": 234.5841857910156
+    },
+    "record99": {
+        "actor_loss": -2.4630323886871337,
+        "critic_loss": 1584.0296875,
+        "reward_mean": 237.79379272460938
+    },
+    "record100": {
+        "actor_loss": -2.3829055309295653,
+        "critic_loss": 1572.7654296875,
+        "reward_mean": 238.24435424804688
+    }
+}

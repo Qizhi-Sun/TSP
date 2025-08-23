@@ -92,7 +92,7 @@ class Agent(nn.Module):
         value = self.evaluate_state(graph_instance)
         advantage = cal_advantage(rewards, value)
         advantage = advantage_normalization(advantage)
-        actor_loss = (-log_sum * advantage).mean(dim=0)
+        actor_loss = (log_sum * advantage).mean(dim=0)
         critic_loss = F.mse_loss(value, rewards)
         # actor update
         self.actor_optimizer.zero_grad()
