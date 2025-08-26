@@ -17,24 +17,7 @@ class Actor(nn.Module):
         return action_sequence, log_sum
 
 
-class Critic(nn.Module):
-    """
-    Critic network
-    return state-value
-    """
-    def __init__(self, batch_size, n_nodes, n_layers, embedding_dim, hidden_dim, hidden_layer_num):
-        super(Critic, self).__init__()
-        self.mlp_layer = nn.Sequential(nn.Linear(hidden_dim, hidden_dim),
-                                       nn.LeakyReLU())
-        self.encoder = GraphAttentionEncoder(batch_size=batch_size, embedding_dim=embedding_dim, n_nodes=n_nodes, n_layers=n_layers)
-        self.value_net = nn.Sequential(*(self.mlp_layer for _ in range(hidden_layer_num)))
-        self.output_layer = nn.Linear(hidden_dim, 1)
-    def forward(self, x):
-        x = self.encoder(x)
-        x = torch.mean(x,dim=1).squeeze()
-        x = self.value_net(x)
-        x = self.output_layer(x).squeeze()
-        return x
+
 
 def advantage_normalization(advantage:torch.Tensor) -> torch.Tensor:
     """
@@ -99,11 +82,7 @@ class Agent(nn.Module):
         actor_loss.backward()
         torch.nn.utils.clip_grad_norm_(self.actor.parameters(), max_norm=2.0)
         self.actor_optimizer.step()
-        # critic update
-        self.critic_optimizer.zero_grad()
-        critic_loss.backward()
-        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), max_norm=2.0)
-        self.critic_optimizer.step()
+        # rollout update
         return actor_loss.item(), critic_loss.item(), rewards.mean().item()
 
 

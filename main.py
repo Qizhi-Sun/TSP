@@ -2,6 +2,7 @@ import json
 import torch
 import argparse
 from model import Agent
+from baseline import cities_form_transfer, TSPSolver
 from utils import generate_data, plot_original, plot_results, plot_log
 
 save_num = 2
@@ -14,9 +15,9 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--n_layer', type=int, default=2, help='Number of layers')
     parser.add_argument('--hidden_dim', type=int, default=256, help='Hidden dimension')
     parser.add_argument('--hidden_layer_num', type=int, default=2, help='Number of hidden layers')
-    parser.add_argument('--epochs', type=int, default=50, help='Number of epochs')
+    parser.add_argument('--epochs', type=int, default=10000, help='Number of epochs')
     parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--step', type=int, default=10, help='Number of steps')
+    parser.add_argument('--step', type=int, default=128, help='Number of steps')
     parser.add_argument('--grid_edge', type=int, default=4, help='Grid edge length')
     parser.add_argument('--train', type=bool, default=True, help='Train or evaluate' )
     return parser.parse_args()
@@ -75,9 +76,21 @@ def evaluate() -> None:
     plot_results(graph_instance, seq_action.detach().cpu().numpy())
     plot_log(f'./log/logs{save_num}.json')
 
+def valid() -> None:
+    solver = TSPSolver(pop_size=100, max_iter=800, mutation_rate=0.1, verbose=True)
+    cities = cities_form_transfer('./datalib/graph_instance_json.json')
+    solution_list = []
+    for batch in range(len(cities)):
+        solution = solver.solve(cities[f"batch{batch}"])
+        solution_list.append(solution)
+
+
+
+
 def main() -> None:
     train()
     evaluate()
+    # valid()
 
 if __name__ == '__main__':
     main()
