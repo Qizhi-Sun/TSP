@@ -15,9 +15,9 @@ def get_args() -> argparse.Namespace:
     parser.add_argument('--n_layer', type=int, default=2, help='Number of layers')
     parser.add_argument('--hidden_dim', type=int, default=256, help='Hidden dimension')
     parser.add_argument('--hidden_layer_num', type=int, default=2, help='Number of hidden layers')
-    parser.add_argument('--epochs', type=int, default=10000, help='Number of epochs')
-    parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--step', type=int, default=128, help='Number of steps')
+    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
+    parser.add_argument('--lr', type=float, default=0.0001, help='Learning rate')
+    parser.add_argument('--step', type=int, default=12, help='Number of steps')
     parser.add_argument('--grid_edge', type=int, default=4, help='Grid edge length')
     parser.add_argument('--train', type=bool, default=True, help='Train or evaluate' )
     return parser.parse_args()
@@ -27,7 +27,7 @@ def train() -> None:
     agent = Agent(batch_size=args.batch_size, embedding_dim=args.embedding_dim,
                        n_nodes=args.n_nodes, n_layers=args.n_layer, hidden_dim=args.hidden_dim,
                        hidden_layer_num=args.hidden_layer_num, lr=args.lr)
-    agent.load_state_dict(torch.load(f'./checkpoints/agent{save_num-1}.pt', map_location=torch.device('cuda')))
+    # agent.load_state_dict(torch.load(f'./checkpoints/agent{save_num-1}.pt', map_location=torch.device('cuda')))
     agent.to('cuda')
     a_loss_list = []
     c_loss_list = []
