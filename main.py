@@ -1,23 +1,25 @@
 import json
+import numpy as np
 import torch
 import argparse
+import matplotlib.pyplot as plt
 from model import Agent
 from baseline import cities_form_transfer, TSPSolver
-from utils import generate_data, plot_original, plot_results, plot_log
+from utils import generate_data, plot_original, plot_results, plot_log, compute_length
 
-save_num = 2
+save_num = 6
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
     parser.add_argument('--embedding_dim', type=int, default=256, help='Embedding dimension')
-    parser.add_argument('--n_nodes', type=int, default=11, help='Number of nodes in TSP')
+    parser.add_argument('--n_nodes', type=int, default=15, help='Number of nodes in TSP')
     parser.add_argument('--n_layer', type=int, default=2, help='Number of layers')
     parser.add_argument('--hidden_dim', type=int, default=256, help='Hidden dimension')
     parser.add_argument('--hidden_layer_num', type=int, default=2, help='Number of hidden layers')
-    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
+    parser.add_argument('--epochs', type=int, default=5000, help='Number of epochs')
     parser.add_argument('--lr', type=float, default=0.0001, help='Learning rate')
-    parser.add_argument('--step', type=int, default=12, help='Number of steps')
+    parser.add_argument('--step', type=int, default=128, help='Number of steps')
     parser.add_argument('--grid_edge', type=int, default=4, help='Grid edge length')
     parser.add_argument('--train', type=bool, default=True, help='Train or evaluate' )
     return parser.parse_args()
@@ -27,7 +29,7 @@ def train() -> None:
     agent = Agent(batch_size=args.batch_size, embedding_dim=args.embedding_dim,
                        n_nodes=args.n_nodes, n_layers=args.n_layer, hidden_dim=args.hidden_dim,
                        hidden_layer_num=args.hidden_layer_num, lr=args.lr)
-    # agent.load_state_dict(torch.load(f'./checkpoints/agent{save_num-1}.pt', map_location=torch.device('cuda')))
+    agent.load_state_dict(torch.load(f'./checkpoints/agent{save_num-1}.pt', map_location=torch.device('cuda')))
     agent.to('cuda')
     a_loss_list = []
     c_loss_list = []
@@ -62,7 +64,7 @@ def train() -> None:
     torch.save(agent.state_dict(), f'./checkpoints/agent{save_num}.pt')
     print("training has been finished")
 
-def evaluate() -> None:
+def evaluate() -> np.ndarray:
     args = get_args()
     state_dict = torch.load(f'./checkpoints/agent{save_num}.pt', map_location=torch.device('cuda'))
     agent = Agent(batch_size=args.batch_size, embedding_dim=args.embedding_dim,
@@ -72,25 +74,37 @@ def evaluate() -> None:
     agent.to('cuda')
     graph_instance = generate_data(args.batch_size, args.n_nodes, args.grid_edge, False)
     seq_action, _ = agent.take_action(graph_instance)
+    dis = compute_length(graph_instance, seq_action.detach().cpu().numpy())
     plot_original(graph_instance)
     plot_results(graph_instance, seq_action.detach().cpu().numpy())
     plot_log(f'./log/logs{save_num}.json')
+    return dis
 
-def valid() -> None:
-    solver = TSPSolver(pop_size=100, max_iter=800, mutation_rate=0.1, verbose=True)
-    cities = cities_form_transfer('./datalib/graph_instance_json.json')
-    solution_list = []
+
+def valid(dis:np.ndarray) -> None:
+    cities = cities_form_transfer('./datalib/graph_instance_json.json', is_3d= True)
+    dis_baseline = []
     for batch in range(len(cities)):
+        solver = TSPSolver(pop_size=100, max_iter=800, mutation_rate=0.1, verbose=True)
         solution = solver.solve(cities[f"batch{batch}"])
-        solution_list.append(solution)
+        dis_baseline.append(solution['best_distance'])
+        solver.plot_solution(solution, f"./images/baseline/{batch}.png")
+    fig = plt.figure()
+    width = 0.5
+    x = np.arange(len(dis))
+    plt.bar(x, dis, width, label='rl', color='red')
+    plt.bar(x, dis_baseline, width, label='baseline', color='blue')
+    fig.savefig(f'./images/dis_compare/dis_baseline.png')
+    plt.close()
+
 
 
 
 
 def main() -> None:
-    train()
-    evaluate()
-    # valid()
+    # train()
+    dis = evaluate()
+    valid(dis)
 
 if __name__ == '__main__':
     main()

@@ -139,11 +139,11 @@ class TSPSolver:
         """
         if city_seq.ndim == 2:  # Single route (M, coord_dim)
             city_next = np.roll(city_seq, -1, axis=0)
-            deltas = city_seq - city_next
+            deltas = city_seq - city_next # todo  check
             dist = np.sqrt(np.sum(deltas**2, axis=1))
         elif city_seq.ndim == 3:  # Multiple routes (N, M, coord_dim)
             city_next = np.roll(city_seq, -1, axis=1)
-            deltas = city_seq - city_next
+            deltas = city_seq[:, :-1, :] - city_next[:, :-1, :]
             dist = np.sqrt(np.sum(deltas**2, axis=2))
         else:
             raise ValueError("city_seq must be (M, coord_dim) or (N, M, coord_dim) array")
@@ -263,7 +263,7 @@ class TSPSolver:
             'is_3d': self.is_3d
         }
 
-    def plot_solution(self, solution: Dict, figsize: Tuple[int, int] = (15, 6)):
+    def plot_solution(self, solution: Dict, save_path, figsize: Tuple[int, int] = (15, 6)):
         """
         Plot the TSP solution (supports both 2D and 3D)
         
@@ -289,7 +289,7 @@ class TSPSolver:
         
         # Close the loop by adding the first city at the end
         route_coords_closed = np.vstack([route_coords, route_coords[0]])
-        
+
         # Get all city coordinates for plotting
         all_coords = np.array([cities[i]['coord'] for i in range(len(cities))])
         
@@ -299,9 +299,9 @@ class TSPSolver:
                        c='red', s=100, alpha=0.8, label='Cities')
             
             # Plot route
-            ax1.plot(route_coords_closed[:, 0], route_coords_closed[:, 1], route_coords_closed[:, 2], 
+            ax1.plot(route_coords[:, 0], route_coords[:, 1], route_coords[:, 2],
                     'b-', linewidth=2, alpha=0.7, label='Route')
-            ax1.scatter(route_coords_closed[:-1, 0], route_coords_closed[:-1, 1], route_coords_closed[:-1, 2], 
+            ax1.scatter(route_coords[:, 0], route_coords[:, 1], route_coords[:, 2],
                        c='blue', s=80, alpha=0.7)
             
             # Add city labels
@@ -351,7 +351,8 @@ class TSPSolver:
                     bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
         
         plt.tight_layout()
-        plt.show()
+        plt.savefig(save_path)
+        plt.close()
 
     @staticmethod
     def create_random_cities_2d(num_cities: int, width: int = 800, height: int = 600) -> Dict:

@@ -16,11 +16,11 @@ def cities_form_transfer(json_cities: str, is_3d: bool = False) -> Dict:
     :param json_cities: file_name
     :return: dict cities
     """
-    cities_dict = {}
     cities_dict_batch = {}
     with open(json_cities) as f:
         cities = json.load(f)
         for i in range(len(cities)):
+            cities_dict = {}
             cities_batch = cities[f"batch{i}"]
             for j in range(len(cities_batch)):
                 cities_dict[j] = {
